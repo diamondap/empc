@@ -1,6 +1,6 @@
 import json
 from datetime import tzinfo, timedelta, datetime
-from bottle import get, post, route, run, static_file
+from bottle import get, post, route, run, static_file, response
 from empc.netconfig import NetConfig, NetworkInterface
 from os.path import realpath, abspath, join, normpath, dirname
 
@@ -16,7 +16,7 @@ def static(filename):
 def ping():
     last_ping = datetime.utcnow()
     data = {'last_ping': last_ping.isoformat() }
-    return json.dumps(data)
+    return data
 
 @get('/')
 def index():
@@ -28,6 +28,7 @@ def netinfo():
     data = []
     for i in interfaces:
         data.append(vars(i))
+    response.set_header('Content-Type', 'application/json')
     return json.dumps(data)
 
     # html = "<p>Found {0} interfaces</p>".format(len(interfaces))
