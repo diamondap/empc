@@ -1,0 +1,22 @@
+lo0: flags=8049<UP,LOOPBACK,RUNNING,MULTICAST> mtu 16384
+     options=3<RXCSUM,TXCSUM>
+     inet6 fe80::1%lo0 prefixlen 64 scopeid 0x1
+     inet 127.0.0.1 netmask 0xff000000
+     inet6 ::1 prefixlen 128
+gif0: flags=8010<POINTOPOINT,MULTICAST> mtu 1280
+stf0: flags=0<> mtu 1280
+en0: flags=8863<UP,BROADCAST,SMART,RUNNING,SIMPLEX,MULTICAST> mtu 1500
+     ether 16:22:a3:c9:e2:1c
+     inet6 dca0::1610:ac1c:fe90:e5e8%en0 prefixlen 64 scopeid 0x4
+     inet 216.29.144.16 netmask 0xffffff80 broadcast 216.30.180.127
+     inet6 2144:f9c0:10:1001:124a:f3f1:fe90:e5e8 prefixlen 64 autoconf
+     inet6 2144:f9c0:10:1001:752d:3d59:3b36:171a prefixlen 64 autoconf temporary
+     media: autoselect
+     status: active
+p2p0: flags=8843<UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST> mtu 2304
+      ether 02:40:f3:90:e5:e8
+      media: autoselect
+      status: inactive
+vboxnet0: flags=8843<UP,BROADCAST,RUNNING,SIMPLEX,MULTICAST> mtu 1500
+          ether 0a:00:27:00:00:00
+          inet 10.11.12.1 netmask 0xffffff00 broadcast 10.11.12.255
