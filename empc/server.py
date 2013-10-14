@@ -1,6 +1,7 @@
 import json
 from datetime import tzinfo, timedelta, datetime
 from bottle import get, post, route, run, static_file, response
+import requests
 from empc.netconfig import NetConfig, NetworkInterface
 from os.path import realpath, abspath, join, normpath, dirname
 
@@ -31,14 +32,19 @@ def netinfo():
     response.set_header('Content-Type', 'application/json')
     return json.dumps(data)
 
-    # html = "<p>Found {0} interfaces</p>".format(len(interfaces))
-    # for i in interfaces:
-    #     html += "<p>Interface {0}</p>".format(i.name)
-    #     html += "<ul>"
-    #     for prop, value in vars(i).items():
-    #         html += "<li>{0} = {1}</li>".format(prop, value)
-    #     html += "</ul>"
-    # return html
+@get('/find_router')
+def find_router():
+    interfaces = NetConfig.get_instance().get_config()
+    found_gateway = False
+    for i in interfaces:
+        if i.is_default:
+            found_gateway = True
+            r = requests.get("http://{0}".format(i.gateway))
+            return r.text
+    if found_gateway:
+        return "Can't get response from router"
+    else:
+        return "Can't find gateway"
 
 def start(host, port):
     run(host=host, port=port, debug=True, reloader=True)
