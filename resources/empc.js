@@ -34,6 +34,18 @@ $(function em() {
             })
     }
 
+    function findRouter() {
+        $.get("/find_router")
+            .done(function(data) {
+                console.log(data);
+                $('#dynamic').html(data);
+            })
+            .fail(function(data) {
+                $('#dynamic').html('<h1>Failed</h1>' + data);
+            })
+    }
+
     startPing();
     setTimeout(getNetInfo, 1000);
+    $('#btn-find-router').click(findRouter);
 });
