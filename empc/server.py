@@ -38,14 +38,11 @@ def find_router():
     interfaces = NetConfig.get_instance().get_config()
     #interfaces = [NetworkInterface(is_default=True, gateway='httpbin.org')]
     responses = client.find_potential_routers(interfaces)
-    data = {'found_router': False, 'routers': []}
+    data = {'routers': []}
     for r in responses:
-        data['found_router'] = True
         router = {'url': r['url'], 'port': r['port']}
         model_info = client.identify_page(r)
-        router['make'] = model_info['make']
-        router['model'] = model_info['model']
-        router['firmware_version'] = model_info['firmware_version']
+        router['model_info'] = model_info
         data['routers'].append(router)
     return data
 
