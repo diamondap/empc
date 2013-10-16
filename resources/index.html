@@ -25,7 +25,6 @@
     </div>
   </div>
 
-  <button type="button" id="btn-find-router" class="btn btn-default">Find Router</button>
 
 <script id="t-netinfo" type="text/html">
   <h1>Network Info</h1>
@@ -33,6 +32,22 @@
     on interface <strong>{{ mac_address }}</strong>. The default gateway
     is <strong>{{ gateway }}</strong>. Let's see if we can find a router
     there.</p>
+</script>
+
+<script id="t-routerinfo" type="text/html">
+  <h1>Router Location</h1>
+  {{^found_router}}
+  <p>Evil Mommy could not find your router.</p>
+  {{/found_router}}
+
+  {{#found_router}}
+  <p>Mommy found possible routers at:</p>
+  <ul>
+    {{#routers}}
+    <a target="_blank" href="{{url}}:{{port}}">{{url}}:{{port}}</a>
+    {{/routers}}
+  </ul>
+  {{/found_router}}
 </script>
 
 
