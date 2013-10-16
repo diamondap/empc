@@ -26,7 +26,7 @@ def find_http_service(host_name_or_ip, timeout=1.0):
                 # Must use vars to convert case-insensitive dict to dict
                 response = {'port': port,
                             'url': url,
-                            'headers': vars(r.headers),
+                            'headers': headers_to_dict(r.headers),
                             'body': r.text}
                 responses.append(response)
         except (ConnectionError, requests.exceptions.ConnectionError) as ex:
@@ -35,8 +35,22 @@ def find_http_service(host_name_or_ip, timeout=1.0):
             pass
     return responses
 
+def headers_to_dict(headers):
+    """
+    Converts response headers collection, which is a special
+    case-insensitive dict, to a normal dict.
+    """
+    hdict = {}
+    for header in headers.keys():
+        hdict[header] = headers[header]
+    return hdict
 
 def find_potential_routers(interfaces):
+    """
+    Returns a list of dictionaries with information about potential routers.
+    Each dict includes keys 'port', 'url', 'body' and 'headers'. The values
+    are all strings, except for headers, which is a dict.
+    """
     default_interfaces = [i for i in interfaces if i.is_default == True]
     responses = []
     for i in default_interfaces:
