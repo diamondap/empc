@@ -9,6 +9,7 @@ this_dir = dirname(realpath(__file__))
 resource_dir = abspath(normpath(join(this_dir, '..', 'resources')))
 last_ping = None
 
+
 @route('/static/<filename>')
 def static(filename):
     return static_file(filename, root=resource_dir)
@@ -41,8 +42,13 @@ def find_router():
     for r in responses:
         data['found_router'] = True
         router = {'url': r['url'], 'port': r['port']}
+        model_info = client.identify_page(r)
+        router['make'] = model_info['make']
+        router['model'] = model_info['model']
+        router['firmware_version'] = model_info['firmware_version']
         data['routers'].append(router)
     return data
+
 
 def start(host, port):
     run(host=host, port=port, debug=True, reloader=True)

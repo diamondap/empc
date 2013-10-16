@@ -36,3 +36,6 @@ class ClientTest(unittest.TestCase):
     def test_find_potential_routers(self):
         responses = client.find_potential_routers(self.mock_interfaces)
         self.assert_responses(responses)
+
+
+    #TODO: test_identify_page

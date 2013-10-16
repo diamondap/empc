@@ -1,4 +1,5 @@
 import requests
+import json
 
 def find_http_service(host_name_or_ip, timeout=1.0):
     """
@@ -56,3 +57,16 @@ def find_potential_routers(interfaces):
     for i in default_interfaces:
         responses = responses + find_http_service(i.gateway)
     return responses
+
+def identify_page(page):
+    """
+    Sends a page to EM server so EM can identify the type of router.
+    """
+    url = "http://localhost:8080/api/v1/identify_router"
+    r = requests.post(url, page)
+    data = {}
+    try:
+        data = json.loads(r.text)
+    except BaseException as ex:
+        data['error'] = ex.message
+    return data

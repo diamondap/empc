@@ -36,18 +36,18 @@
 
 <script id="t-routerinfo" type="text/html">
   <h1>Router Location</h1>
-  {{^found_router}}
+  {{^routers}}
   <p>Evil Mommy could not find your router.</p>
-  {{/found_router}}
+  {{/routers}}
 
-  {{#found_router}}
-  <p>Mommy found possible routers at:</p>
-  <ul>
-    {{#routers}}
-    <a target="_blank" href="{{url}}:{{port}}">{{url}}:{{port}}</a>
-    {{/routers}}
-  </ul>
-  {{/found_router}}
+  {{#routers}}
+  <p>Mommy found a possible router at
+    <a target="_blank" href="{{url}}:{{port}}">{{url}}:{{port}}</a>.
+    This looks like a <strong>{{model}}</strong> from
+    <strong>{{make}}</strong>. The firmware version is
+    <strong>{{firmware_version}}<strong>.
+  </p>
+  {{/routers}}
 </script>
 
 
