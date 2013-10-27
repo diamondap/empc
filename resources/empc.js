@@ -41,11 +41,24 @@ $(function em() {
             .done(function(data) {
                 console.log(data);
                 $('#dynamic').append(tRouterInfo(data));
+                //autoLogin();
             })
             .fail(function(data) {
                 $('#dynamic').html('<h1>Request Failed</h1>' + data);
             })
     }
+
+    function autoLogin() {
+        $.get("/auto_login")
+            .done(function(data) {
+                console.log(data);
+                $('#dynamic').append(data['html']);
+            })
+            .fail(function(data) {
+                $('#dynamic').html('<h1>Request Failed</h1>' + data);
+            })
+    }
+
 
     startPing();
     setTimeout(getNetInfo, 1000);

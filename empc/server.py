@@ -46,6 +46,9 @@ def find_router():
         data['routers'].append(router)
     return data
 
+@get('/auto_login')
+def auto_login():
+    return client.auto_login(1)
 
 def start(host, port):
     run(host=host, port=port, debug=True, reloader=True)
