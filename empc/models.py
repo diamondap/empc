@@ -143,3 +143,24 @@ class NetClient(JsonSerializable):
         self.is_whitelisted = kwargs.get('is_whitelisted')
         self.is_blacklisted = kwargs.get('is_blacklisted')
         self.nickname = kwargs.get('nickname')
+
+class NetState(JsonSerializable):
+    """
+    Contains information about the state of the network and the
+    current device's default interface.
+    """
+
+    def __init__(self, *args, **kwargs):
+        self.router = kwargs.get('router')
+        self.interfaces = kwargs.get('interfaces', [])
+        self.clients = kwargs.get('clients', [])
+
+    def to_json(self):
+        if self.router:
+            router_dict = self.router.__dict__,
+        else:
+            router_dict = None
+        data = {'router': router_dict,
+                'interfaces': to_dict_list(self.interfaces),
+                'clients': to_dict_list(self.clients)}
+        return json.dumps(data)

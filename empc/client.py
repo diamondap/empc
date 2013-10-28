@@ -59,8 +59,7 @@ def identify_page(router_response):
     r = em_client.post(url, data=data, headers=headers)
     response_data = {'error': None, 'router': None}
     try:
-        #print(r.json())
-        response_data['router'] = r.json() # models.Router(r.json())
+        response_data['router'] = r.json()
         response_data['router']['base_url'] = router_response.url
     except BaseException as ex:
         response_data['error'] = ex.message

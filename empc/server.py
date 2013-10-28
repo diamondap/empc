@@ -2,15 +2,15 @@ import json
 from datetime import tzinfo, timedelta, datetime
 from bottle import get, post, route, run, static_file, response
 from os.path import realpath, abspath, join, normpath, dirname
-from empc.netconfig import NetConfig, NetworkInterface
+from empc.netconfig import NetConfig
 import empc.client as client
-import empc.models as models
+from empc import models
 from empc.log import logger
 
 this_dir = dirname(realpath(__file__))
 resource_dir = abspath(normpath(join(this_dir, '..', 'resources')))
 last_ping = None
-
+net_state = None
 
 @route('/static/<filename>')
 def static(filename):
@@ -29,28 +29,25 @@ def index():
 @get('/netinfo')
 def netinfo():
     interfaces = NetConfig.get_instance().get_config()
-    data = []
-    for i in interfaces:
-        data.append(vars(i))
+    router = find_router(interfaces)
+    global net_state
+    net_state = models.NetState(interfaces=interfaces,
+                                router=router)
     response.set_header('Content-Type', 'application/json')
-    return json.dumps(data)
+    print(net_state.to_json())
+    return net_state.to_json()
 
-@get('/find_router')
-def find_router():
-    interfaces = NetConfig.get_instance().get_config()
-
-    # responses is a list of RouterResponse objects
+def find_router(interfaces):
+    """
+    Note that this returns only the first router. We're checking only
+    for the default gateway on the default interface, so there should
+    be only one.
+    """
     responses = client.find_potential_routers(interfaces)
-    routers = []
     for router_response in responses:
         id_response = client.identify_page(router_response)
-        print(id_response['router'])
-        routers.append(id_response['router'])
-        #logger.info("Looks like a {0} {1}".format(
-        #    router.manufacturer, router.model))
-    #data = {'routers': models.to_dict_list(routers) }
-    response.set_header('Content-Type', 'application/json')
-    return json.dumps({'routers': routers})
+        router_dict = id_response['router']
+        return models.Router(**router_dict)
 
 @get('/auto_login')
 def auto_login():
