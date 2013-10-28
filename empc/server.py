@@ -4,6 +4,7 @@ from bottle import get, post, route, run, static_file, response
 from os.path import realpath, abspath, join, normpath, dirname
 from empc.netconfig import NetConfig, NetworkInterface
 import empc.client as client
+import empc.models as models
 from empc.log import logger
 
 this_dir = dirname(realpath(__file__))
@@ -37,18 +38,16 @@ def netinfo():
 @get('/find_router')
 def find_router():
     interfaces = NetConfig.get_instance().get_config()
-    #interfaces = [NetworkInterface(is_default=True, gateway='httpbin.org')]
+
+    # responses is a list of RouterResponse objects
     responses = client.find_potential_routers(interfaces)
-    data = {'routers': []}
-    for r in responses:
-        router = {'url': r['url'], 'port': r['port']}
-        logger.info("Checking potential router at {0}:{1}".format(
-            r['url'], r['port']))
-        model_info = client.identify_page(r)
-        router['model_info'] = model_info
-        logger.info("Looks like a {0} {1}".format(model_info['manufacturer'],
-                                                  model_info['model']))
-        data['routers'].append(router)
+    routers = []
+    for router_response in responses:
+        router = client.identify_page(router_response)
+        routers.append(router)
+        #logger.info("Looks like a {0} {1}".format(
+        #    router.manufacturer, router.model))
+    data = {'routers': models.to_dict_list(routers) }
     return data
 
 @get('/auto_login')

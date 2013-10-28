@@ -17,16 +17,16 @@ class ClientTest(unittest.TestCase):
         self.assertEqual(2, len(responses))
         # Response from port 80
         response = responses[0]
-        self.assertEqual('http://httpbin.org', response['url'])
-        self.assertEqual(80, response['port'])
-        self.assertTrue(len(response['headers']) > 3)
-        self.assertTrue(len(response['body']) > 1000)
+        self.assertEqual('http://httpbin.org', response.url)
+        self.assertEqual(80, response.port)
+        self.assertTrue(len(response.headers) > 3)
+        self.assertTrue(len(response.body) > 1000)
         # Response from port 443
         response = responses[1]
-        self.assertEqual('https://httpbin.org', response['url'])
-        self.assertEqual(443, response['port'])
-        self.assertTrue(len(response['headers']) > 3)
-        self.assertTrue(len(response['body']) > 1000)
+        self.assertEqual('https://httpbin.org', response.url)
+        self.assertEqual(443, response.port)
+        self.assertTrue(len(response.headers) > 3)
+        self.assertTrue(len(response.body) > 1000)
 
 
     def test_find_http_service(self):
