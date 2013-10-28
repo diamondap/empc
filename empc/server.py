@@ -43,12 +43,14 @@ def find_router():
     responses = client.find_potential_routers(interfaces)
     routers = []
     for router_response in responses:
-        router = client.identify_page(router_response)
-        routers.append(router)
+        id_response = client.identify_page(router_response)
+        print(id_response['router'])
+        routers.append(id_response['router'])
         #logger.info("Looks like a {0} {1}".format(
         #    router.manufacturer, router.model))
-    data = {'routers': models.to_dict_list(routers) }
-    return data
+    #data = {'routers': models.to_dict_list(routers) }
+    response.set_header('Content-Type', 'application/json')
+    return json.dumps({'routers': routers})
 
 @get('/auto_login')
 def auto_login():

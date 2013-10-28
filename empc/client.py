@@ -35,30 +35,6 @@ def find_http_service(host_name_or_ip, timeout=1.0):
             pass
     return responses
 
-# def response_to_dict(response, method, url, port):
-#     """
-#     Convert an HttpResponse object to a simple dictionary that can be
-#     easily converted to and from JSON. Though the response object has
-#     a URL property, it may not be the URL we originally requested, since
-#     the client automatically follows redirects and reports the last URL
-#     it loaded. The url param of this method is the original URL we requested.
-#     """
-#     return {'port': port,
-#             'url': url,
-#             'headers': headers_to_dict(response.headers),
-#             'body': response.text,
-#             'method': response.request.method,
-#             'status_code': response.status_code}
-
-# def headers_to_dict(headers):
-#     """
-#     Converts response headers collection, which is a special
-#     case-insensitive dict, to a normal dict.
-#     """
-#     hdict = {}
-#     for header in headers.keys():
-#         hdict[header] = headers[header]
-#     return hdict
 
 def find_potential_routers(interfaces):
     """
@@ -77,10 +53,15 @@ def identify_page(router_response):
     Sends a page to EM server so EM can identify the type of router.
     """
     url = "http://localhost:8080/api/v1/identify_router"
-    r = em_client.post(url, {'router_response': router_response.to_json()})
-    response_data = {}
+    data = router_response.to_json()
+    headers = {'Content-type': 'application/json',
+               'Accept': 'application/json'}
+    r = em_client.post(url, data=data, headers=headers)
+    response_data = {'error': None, 'router': None}
     try:
-        response_data = models.Router(json.loads(r.text))
+        #print(r.json())
+        response_data['router'] = r.json() # models.Router(r.json())
+        response_data['router']['base_url'] = router_response.url
     except BaseException as ex:
         response_data['error'] = ex.message
     return response_data
