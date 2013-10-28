@@ -1,17 +1,7 @@
 import subprocess
 import platform
 import re
-
-
-class NetworkInterface:
-    "Contains information about one of the system's network interfaces."
-    def __init__(self, *args, **kwargs):
-        self.mac_address = kwargs.get('mac_address', None)
-        self.ip4_address = kwargs.get('ip4_address', None)
-        self.ip6_address = kwargs.get('ip6_address', None)
-        self.name = kwargs.get('name', None)
-        self.gateway = kwargs.get('gateway', None)
-        self.is_default = kwargs.get('is_default', False)
+from empc.models import NetworkInterface
 
 
 class NetConfig:

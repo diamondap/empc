@@ -95,8 +95,23 @@ class RouterResponse(JsonSerializable):
         return "RouterResponse {0} {1}".format(self.method, self.url)
 
 
-class Router(JsonSerializable):
+class NetworkInterface(JsonSerializable):
+    """
+    Contains information about one of the system's network interfaces.
+    """
+    def __init__(self, *args, **kwargs):
+        self.mac_address = kwargs.get('mac_address', None)
+        self.ip4_address = kwargs.get('ip4_address', None)
+        self.ip6_address = kwargs.get('ip6_address', None)
+        self.name = kwargs.get('name', None)
+        self.gateway = kwargs.get('gateway', None)
+        self.is_default = kwargs.get('is_default', False)
 
+
+class Router(JsonSerializable):
+    """
+    Contains information about the network Router.
+    """
     def __init__(self, *args, **kwargs):
         self.manufacturer = kwargs.get('manufacturer')
         self.model = kwargs.get('model')
@@ -108,6 +123,23 @@ class Router(JsonSerializable):
         self.firmware_minor = kwargs.get('firmware_minor')
         self.firmware_point = kwargs.get('firmware_point')
         self.firmware_date = kwargs.get('firmware_date')
-        self.ip_address = None
-        self.mac_address = None
-        self.base_url = None
+        self.ip_address = kwargs.get('ip_address')
+        self.mac_address = kwargs.get('mac_address')
+        self.base_url = kwargs.get('base_url')
+        self.features = kwargs.get('features')
+
+
+class NetClient(JsonSerializable):
+    """
+    Contains information about a single client on the network.
+    """
+    def __init__(self, *args, **kwargs):
+        self.ip = kwargs.get('ip')
+        self.mac = kwargs.get('mac')
+        self.hostname = kwargs.get('hostname')
+        self.conn_type = kwargs.get('conn_type')
+        self.device_type = kwargs.get('device_type')
+        self.os_type = kwargs.get('os_type')
+        self.is_whitelisted = kwargs.get('is_whitelisted')
+        self.is_blacklisted = kwargs.get('is_blacklisted')
+        self.nickname = kwargs.get('nickname')
