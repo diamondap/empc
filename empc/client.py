@@ -1,8 +1,10 @@
 import requests
 import json
+from empc.log import logger
 
 router_client = requests.Session()
 em_client = requests.Session()
+router = {}
 
 def find_http_service(host_name_or_ip, timeout=1.0):
     """
@@ -27,10 +29,12 @@ def find_http_service(host_name_or_ip, timeout=1.0):
         try:
             r = router_client.get(url, verify=False, timeout=timeout)
             if r.status_code == 200:
+                logger.info("Got 200 from {0}".format(url))
                 responses.append(response_to_dict(r, url, port))
-        except (ConnectionError, requests.exceptions.ConnectionError) as ex:
+        except Exception as ex:
             # This is typically connection refused, because there
             # is no HTTP service running on the port we queried.
+            #logger.warn("Got exception {0} from {1}".format(ex, url))
             pass
     return responses
 
